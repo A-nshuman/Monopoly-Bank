@@ -88,17 +88,11 @@ table tbody td {
 }
 
 @media (max-width:600px) {
-    table {
+    table, .books, .loanContainer {
         display: none;
     }
     .container {
         zoom: 1;
-    }
-    .books {
-        display: none;
-    }
-    .loan {
-        display: none;
     }
 }
 
@@ -139,4 +133,18 @@ button {
     background-color: greenyellow;
     color: black;
     text-decoration: none;
+}
+
+.tncBTN {
+    position: fixed;
+    border-radius: 50%;
+    background-color: mediumpurple;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    bottom: 10px;
+    right: 10px;
+    text-decoration: none;
+    color: black;
 }
