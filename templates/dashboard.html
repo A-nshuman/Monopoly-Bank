@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <div class="container">
+        <h1>Dashboard</h1>
+        <div class="balance">
+            <p>Balance: </p>
+            <p>100000</p>
+        </div>
+        <div class="send">
+            <input type="text" id="RecieverName" placeholder="Reciever Name">
+            <input type="number" id="Amount" placeholder="Amount">
+        </div>
+        <a>Send</a>
+    </div> -->
+    
+    <div class="container">
+        <h1>Hello {{ user.name }}</h1>
+        <h2>Dashboard</h2>
+        <div class="balance">
+            <p>Balance:</p>
+            <p>{{ user.balance }}</p>
+        </div>
+        <form method="POST">
+            <div class="send">
+                <input type="text" name="receiver_name" placeholder="Receiver Name" required>
+                <input type="number" name="amount" placeholder="Amount" required>
+            </div>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Statement</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for statement in statements %}
+                <tr>
+                    <td>{{ statement['statement'] }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</body>
+</html>

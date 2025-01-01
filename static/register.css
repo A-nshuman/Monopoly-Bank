@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: rgb(5, 104, 104);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .send {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.container .form input {
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.container button {
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid black;
+    background-color: greenyellow;
+    color: black;
+    text-decoration: none;
+}
