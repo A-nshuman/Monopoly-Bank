@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
     <title>Document</title>
 </head>
+
 <body>
     <!-- <div class="container">
         <h1>Dashboard</h1>
@@ -19,36 +21,103 @@
         </div>
         <a>Send</a>
     </div> -->
+
+    <!-- ------------------------------------------------------------------------------ -->
     
-    <div class="container">
-        <h1>Hello {{ user.name }}</h1>
-        <h2>Dashboard</h2>
-        <div class="balance">
-            <p>Balance:</p>
-            <p>{{ user.balance }}</p>
-        </div>
-        <form method="POST">
-            <div class="send">
-                <input type="text" name="receiver_name" placeholder="Receiver Name" required>
-                <input type="number" name="amount" placeholder="Amount" required>
+    <!-- 
+        <div class="container">
+            <h1>Hello {{ user.name }}</h1>
+            <h2>Dashboard</h2>
+            <div class="balance">
+                <p>Balance:</p>
+                <p>{{ user.balance }}</p>
             </div>
-            <button type="submit">Send</button>
-        </form>
-    </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Statement</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for statement in statements %}
+            <form method="POST">
+                <div class="send">
+                    <input type="text" name="receiver_name" placeholder="Receiver Name" required>
+                    <input type="number" name="amount" placeholder="Amount" required>
+                </div>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Statement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for statement in statements %}
                 <tr>
                     <td>{{ statement['statement'] }}</td>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="loan">
+            <h2>Loan Calculator</h2>
+            <input type="number" name="loanAmount" placeholder="Amount">
+            <button>Calculate</button>
+            <div class="output">00</div>
+        </div>
+        <script src="{{ url_for('static', filename='dashboard.js') }}"></script> -->
+        <!-- ------------------------------------------------------------------------------ -->
+
+        <div class="container">
+            <h1>Hello {{ user.name }}</h1>
+            <div class="balance">
+                <p>Balance:</p>
+                <p>{{ user.balance }}</p>
+            </div>
+            <form method="POST">
+                <div class="send">
+                    <input type="text" name="receiver_name" placeholder="Receiver Name" required>
+                    <input type="number" name="amount" placeholder="Amount" required>
+                </div>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Statement</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for statement in statements %}
+                    <tr>
+                        <td>{{ statement['statement'] }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="loanContainer">
+            <div class="loan">
+                <form method="POST">
+                    <h3>Loan Calculator</h3>
+                    <input type="number" name="loanINP" placeholder="Amount" required>
+                    <button type="submit">Calculate</button>
+                </form>
+                {% if loan_result %}
+                    <div class="output">
+                        {{ loan_result }}
+                    </div>
+                {% endif %}
+            </div>
     
-</body>
-</html>
+            <div class="giveLoan">
+                <form method="POST">
+                    <h3>HandOut Loan</h3>
+                    <input type="text" name="loanGiveName" placeholder="Receiver Name" required>
+                    <input type="number" name="loanGiveAmt" placeholder="Amount" required>
+                    <button type="submit">HandOut</button>
+                </form>
+            </div>
+        </div>
+        
+    </body>
+    
+    </html>

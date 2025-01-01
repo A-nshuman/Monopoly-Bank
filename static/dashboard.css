@@ -20,12 +20,12 @@ table {
     border-radius: 20px;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     padding: 20px;
     align-items: center;
     justify-content: center;
     zoom: 2;
-    max-height: calc(626.4px/2);
+    height: calc(555px/2);
     width: calc(452.8px/2);
     /* position: fixed;
     transform: translate3d(250px, 0px, 0); */
@@ -42,6 +42,35 @@ table tbody td {
     border-bottom: 1px solid black;
 }
 
+.loanContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.loan, .giveLoan {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    zoom: 1.38;
+    max-height: calc(626.4px/2);
+    width: calc(452.8px/2);
+}
+
+.loan form, .giveLoan form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
 .container {
     background-color: white;
     border-radius: 20px;
@@ -54,6 +83,10 @@ table tbody td {
     zoom: 2;
 }
 
+.container .balance {
+    font-size: large;
+}
+
 @media (max-width:600px) {
     table {
         display: none;
@@ -62,6 +95,9 @@ table tbody td {
         zoom: 1;
     }
     .books {
+        display: none;
+    }
+    .loan {
         display: none;
     }
 }
@@ -86,10 +122,14 @@ table tbody td {
     gap: 10px;
 }
 
-.container .send input {
+input {
     padding: 10px;
     border-radius: 10px;
     border: 1px solid black;
+}
+
+input:focus {
+    outline: 0.5px solid black;
 }
 
 button {

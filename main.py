@@ -147,6 +147,10 @@ def ensure_tables_exist():
         cursor.close()
         connection.close()
 
+def calcLoan(amount):
+    percent = 0.15 * amount
+    return amount, int(percent), int(amount + percent)
+
 # Routes
 @app.route('/')
 def index():
@@ -177,10 +181,59 @@ def register():
         return redirect(url_for('dashboard', user_id=user_id))
     return render_template('register.html')
 
+'''
+# @app.route('/dashboard/<int:user_id>', methods=['GET', 'POST'])
+# def dashboard(user_id):
+#     connection = get_db_connection()
+#     cursor = connection.cursor(dictionary=True)
+#     try:
+#         # Fetch user details
+#         cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
+#         user = cursor.fetchone()
+#         if not user:
+#             return "User not found", 404
+
+#         if request.method == 'POST':
+#             sender_name = user['name']
+#             receiver_name = request.form['receiver_name']
+#             amount = int(request.form['amount'])
+
+#             # Fetch receiver details
+#             cursor.execute("SELECT * FROM users WHERE name = %s", (receiver_name,))
+#             receiver = cursor.fetchone()
+
+#             if receiver and amount > 0 and user['balance'] >= amount:
+#                 # Update balances
+#                 cursor.execute(
+#                     "UPDATE users SET balance = balance - %s WHERE id = %s",
+#                     (amount, user['id'])
+#                 )
+#                 cursor.execute(
+#                     "UPDATE users SET balance = balance + %s WHERE id = %s",
+#                     (amount, receiver['id'])
+#                 )
+#                 # Add a statement to the statements table
+#                 statement = f"{sender_name} sent {amount} to {receiver_name}"
+#                 cursor.execute("INSERT INTO statements (statement) VALUES (%s)", (statement,))
+#                 connection.commit()
+#                 return redirect(url_for('dashboard', user_id=user_id))
+
+#         # Fetch all statements
+#         cursor.execute("SELECT * FROM statements order by id desc")
+#         statements = cursor.fetchall()
+
+#     finally:
+#         cursor.close()
+#         connection.close()
+
+#     return render_template('dashboard.html', user=user, statements=statements)
+'''
+
 @app.route('/dashboard/<int:user_id>', methods=['GET', 'POST'])
 def dashboard(user_id):
     connection = get_db_connection()
     cursor = connection.cursor(dictionary=True)
+    loan_result = None
     try:
         # Fetch user details
         cursor.execute("SELECT * FROM users WHERE id = %s", (user_id,))
@@ -189,39 +242,54 @@ def dashboard(user_id):
             return "User not found", 404
 
         if request.method == 'POST':
-            sender_name = user['name']
-            receiver_name = request.form['receiver_name']
-            amount = int(request.form['amount'])
+            if 'receiver_name' in request.form and 'amount' in request.form:
+                # Handle transaction
+                sender_name = user['name']
+                receiver_name = request.form['receiver_name']
+                amount = int(request.form['amount'])
 
-            # Fetch receiver details
-            cursor.execute("SELECT * FROM users WHERE name = %s", (receiver_name,))
-            receiver = cursor.fetchone()
+                # Fetch receiver details
+                cursor.execute("SELECT * FROM users WHERE name = %s", (receiver_name,))
+                receiver = cursor.fetchone()
 
-            if receiver and amount > 0 and user['balance'] >= amount:
-                # Update balances
-                cursor.execute(
-                    "UPDATE users SET balance = balance - %s WHERE id = %s",
-                    (amount, user['id'])
-                )
-                cursor.execute(
-                    "UPDATE users SET balance = balance + %s WHERE id = %s",
-                    (amount, receiver['id'])
-                )
-                # Add a statement to the statements table
-                statement = f"{sender_name} sent {amount} to {receiver_name}"
+                if receiver and amount > 0 and user['balance'] >= amount:
+                    # Update balances
+                    cursor.execute(
+                        "UPDATE users SET balance = balance - %s WHERE id = %s",
+                        (amount, user['id'])
+                    )
+                    cursor.execute(
+                        "UPDATE users SET balance = balance + %s WHERE id = %s",
+                        (amount, receiver['id'])
+                    )
+                    # Add a statement to the statements table
+                    statement = f"{sender_name} sent {amount} to {receiver_name}"
+                    cursor.execute("INSERT INTO statements (statement) VALUES (%s)", (statement,))
+                    connection.commit()
+                    return redirect(url_for('dashboard', user_id=user_id))
+            elif 'loanINP' in request.form:
+                # Handle loan calculation
+                loan_amount = int(request.form['loanINP'])
+                amt, per, tot = calcLoan(loan_amount)
+                loan_result = f"{amt} + {per} = {tot}"
+
+            elif 'loanGiveAmt' in request.form:
+                loan_amount = int(request.form['loanGiveAmt'])
+                loan_user = request.form['loanGiveName']
+                statement = f"{loan_user} loaned out {loan_amount}"
                 cursor.execute("INSERT INTO statements (statement) VALUES (%s)", (statement,))
                 connection.commit()
                 return redirect(url_for('dashboard', user_id=user_id))
 
         # Fetch all statements
-        cursor.execute("SELECT * FROM statements order by id desc")
+        cursor.execute("SELECT * FROM statements ORDER BY id DESC")
         statements = cursor.fetchall()
 
     finally:
         cursor.close()
         connection.close()
 
-    return render_template('dashboard.html', user=user, statements=statements)
+    return render_template('dashboard.html', user=user, statements=statements, loan_result=loan_result)
 
 
 if __name__ == '__main__':
