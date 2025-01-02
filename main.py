@@ -280,8 +280,13 @@ def dashboard(user_id):
             elif 'loanGiveAmt' in request.form:
                 loan_amount = int(request.form['loanGiveAmt'])
                 loan_user = request.form['loanGiveName']
-                statement = f"{loan_user} loaned out {loan_amount}"
+                amt, per, tot = calcLoan(loan_amount)
+                statement = f"{loan_user} owes {tot} to B"
                 cursor.execute("INSERT INTO statements (statement) VALUES (%s)", (statement,))
+                cursor.execute(
+                        "UPDATE users SET balance = balance + %s WHERE name = %s",
+                        (loan_amount    , loan_user)
+                    )
                 connection.commit()
                 return redirect(url_for('dashboard', user_id=user_id))
 
