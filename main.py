@@ -285,7 +285,7 @@ def dashboard(user_id):
                 cursor.execute("INSERT INTO statements (statement) VALUES (%s)", (statement,))
                 cursor.execute(
                         "UPDATE users SET balance = balance + %s WHERE name = %s",
-                        (loan_amount    , loan_user)
+                        (loan_amount, loan_user)
                     )
                 connection.commit()
                 return redirect(url_for('dashboard', user_id=user_id))

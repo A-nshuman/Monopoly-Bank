@@ -148,3 +148,10 @@ button {
     text-decoration: none;
     color: black;
 }
+
+.alert {
+    background-color: red;
+    position: absolute;
+    padding: 20px;
+    zoom: 2;
+}
